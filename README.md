@@ -2,6 +2,8 @@
 
 Run Claude Code in a sandboxed environment for Java backend and JavaScript frontend development.
 
+For a more thorough discussion, see [Containerizing Claude](https://medium.com/kantega/containerizing-claude-ef722831fb10) on Medium.
+
 ## Quick start
 
 Requires [GitHub CLI](https://cli.github.com) (`gh auth login`) and either Podman or Docker. Use `--no-token` to skip the GitHub CLI requirement (push/PR must be done outside the sandbox).
