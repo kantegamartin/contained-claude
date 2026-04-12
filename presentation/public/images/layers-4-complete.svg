@@ -1,14 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300">
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="350" viewBox="0 0 600 350">
   <rect x="0" y="0" width="600" height="44" rx="4" fill="#6d28d9"/>
   <text x="300" y="28" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">Claude Code CLI</text>
   <rect x="0" y="50" width="600" height="44" rx="4" fill="#059669"/>
   <text x="300" y="78" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">SDKMAN + Java LTS + Maven</text>
-  <rect x="0" y="100" width="600" height="44" rx="4" fill="#e9c46a"/>
-  <text x="300" y="128" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#000">Node.js 24 LTS</text>
-  <rect x="0" y="150" width="600" height="44" rx="4" fill="#2a9d8f"/>
-  <text x="300" y="178" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">GitHub CLI</text>
-  <rect x="0" y="200" width="600" height="44" rx="4" fill="#f4a261"/>
-  <text x="300" y="228" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#000">System tools (git, curl, jq, ssh, ...)</text>
-  <rect x="0" y="250" width="600" height="44" rx="4" fill="#e76f51"/>
-  <text x="300" y="278" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">Ubuntu 25.10</text>
+  <rect x="0" y="100" width="600" height="44" rx="4" fill="#7c3aed"/>
+  <text x="300" y="128" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">Podman-remote (container CLI)</text>
+  <rect x="0" y="150" width="600" height="44" rx="4" fill="#e9c46a"/>
+  <text x="300" y="178" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#000">Node.js 24 LTS</text>
+  <rect x="0" y="200" width="600" height="44" rx="4" fill="#2a9d8f"/>
+  <text x="300" y="228" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">GitHub CLI</text>
+  <rect x="0" y="250" width="600" height="44" rx="4" fill="#f4a261"/>
+  <text x="300" y="278" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#000">System tools (git, curl, jq, ssh, ...)</text>
+  <rect x="0" y="300" width="600" height="44" rx="4" fill="#e76f51"/>
+  <text x="300" y="328" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">Ubuntu 25.10</text>
 </svg>

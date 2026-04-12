@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300">
-  <rect x="0" y="150" width="600" height="44" rx="4" fill="#2a9d8f"/>
-  <text x="300" y="178" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">GitHub CLI</text>
-  <rect x="0" y="200" width="600" height="44" rx="4" fill="#f4a261"/>
-  <text x="300" y="228" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#000">System tools (git, curl, jq, ssh, ...)</text>
-  <rect x="0" y="250" width="600" height="44" rx="4" fill="#e76f51"/>
-  <text x="300" y="278" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">Ubuntu 25.10</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="350" viewBox="0 0 600 350">
+  <rect x="0" y="200" width="600" height="44" rx="4" fill="#2a9d8f"/>
+  <text x="300" y="228" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">GitHub CLI</text>
+  <rect x="0" y="250" width="600" height="44" rx="4" fill="#f4a261"/>
+  <text x="300" y="278" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#000">System tools (git, curl, jq, ssh, ...)</text>
+  <rect x="0" y="300" width="600" height="44" rx="4" fill="#e76f51"/>
+  <text x="300" y="328" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff">Ubuntu 25.10</text>
 </svg>
