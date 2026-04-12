@@ -48,6 +48,14 @@ RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
+# --- Podman remote client (container CLI for testcontainers) ---
+# podman-remote is a socket-only client with no local daemon capabilities,
+# making it safer than docker-cli or full podman inside a sandbox.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    podman-remote \
+    && ln -s /usr/bin/podman-remote /usr/local/bin/docker \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY setup_user.sh /tmp/setup_user.sh
 RUN chmod +x /tmp/setup_user.sh \
     && /tmp/setup_user.sh ${USERNAME} \
