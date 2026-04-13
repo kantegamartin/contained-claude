@@ -13,6 +13,7 @@
 #   ./claude-container.sh --no-token   # run without GitHub token (push/PR outside sandbox)
 #   ./claude-container.sh --install-go-python  # include Go and Python in image
 #   ./claude-container.sh -p "prompt"  # pass arguments through to claude
+#   ./claude-container.sh --exclude node_modules --exclude .git  # hide folders from Claude
 #
 # To customise the Java version:
 #   JAVA_VERSION=21.0.5-tem ./claude-container.sh --rebuild
@@ -41,17 +42,20 @@ PODMAN_MODE="socket"
 GH_TOKEN_ENABLED=true
 INSTALL_GO_PYTHON=false
 PROJECT_FOLDER="$PWD"
+EXCLUDE_DIRS=()
 CLAUDE_ARGS=()
-for arg in "$@"; do
-  case "$arg" in
+while [[ $# -gt 0 ]]; do
+  case "$1" in
     --rebuild) REBUILD=true ;;
     --debug) DEBUG=true ;;
     --no-podman) PODMAN_MODE="none" ;;
     --no-token) GH_TOKEN_ENABLED=false ;;
     --install-go-python) INSTALL_GO_PYTHON=true ;;
-    --folder) PROJECT_NAME="$1"; shift ;;
-    *) CLAUDE_ARGS+=("$arg") ;;
+    --folder) PROJECT_FOLDER="$2"; shift ;;
+    --exclude) EXCLUDE_DIRS+=("$2"); shift ;;
+    *) CLAUDE_ARGS+=("$1") ;;
   esac
+  shift
 done
 PROJECT_NAME=$(echo "${PROJECT_FOLDER##*/}")
 
@@ -155,6 +159,12 @@ if $GH_TOKEN_ENABLED; then
   GH_TOKEN_ARG="-e GH_TOKEN=$(gh auth token)"
 fi
 
+# --- Build tmpfs args for excluded directories ---
+EXCLUDE_ARGS=()
+for dir in "${EXCLUDE_DIRS[@]}"; do
+  EXCLUDE_ARGS+=(--tmpfs "$CHOME/$PROJECT_NAME/$dir")
+done
+
 $CONTAINER_CMD run --rm -it \
   --name "$CONTAINER_NAME" \
   --hostname claude-sandbox \
@@ -162,6 +172,7 @@ $CONTAINER_CMD run --rm -it \
   $PODMAN_ARGS \
   \
   -v "$PROJECT_FOLDER:$CHOME/$PROJECT_NAME" \
+  "${EXCLUDE_ARGS[@]}" \
   \
   -v "$HOME/.claude:$CHOME/.claude" \
   -v "$HOME/.claude.json:$CHOME/.claude.json" \
