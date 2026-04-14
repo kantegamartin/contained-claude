@@ -165,10 +165,13 @@ for dir in "${EXCLUDE_DIRS[@]}"; do
   EXCLUDE_ARGS+=(--tmpfs "$CHOME/$PROJECT_NAME/$dir")
 done
 
+USERNS_ARG=""
+[ "$CONTAINER_CMD" = "podman" ] && USERNS_ARG="--userns=keep-id"
+
 $CONTAINER_CMD run --rm -it \
   --name "$CONTAINER_NAME" \
   --hostname claude-sandbox \
-  --userns=keep-id \
+  $USERNS_ARG \
   $PODMAN_ARGS \
   \
   -v "$PROJECT_FOLDER:$CHOME/$PROJECT_NAME" \
