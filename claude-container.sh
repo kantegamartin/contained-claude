@@ -159,6 +159,12 @@ if $GH_TOKEN_ENABLED; then
   GH_TOKEN_ARG="-e GH_TOKEN=$(gh auth token)"
 fi
 
+# --- Anthropic environment variables (forwarded if set on host) ---
+ANTHROPIC_ARGS=()
+for var in ANTHROPIC_DEFAULT_SONNET_MODEL ANTHROPIC_DEFAULT_HAIKU_MODEL ANTHROPIC_DEFAULT_OPUS_MODEL ANTHROPIC_BASE_URL ANTHROPIC_AUTH_TOKEN; do
+  [ -n "${!var}" ] && ANTHROPIC_ARGS+=(-e "$var=${!var}")
+done
+
 # --- Build tmpfs args for excluded directories ---
 EXCLUDE_ARGS=()
 for dir in "${EXCLUDE_DIRS[@]}"; do
@@ -191,6 +197,7 @@ $CONTAINER_CMD run --rm -it \
   $PORT_ARGS \
   \
   $GH_TOKEN_ARG \
+  "${ANTHROPIC_ARGS[@]}" \
   $PODMAN_ENV \
   \
   $ENTRYPOINT \
