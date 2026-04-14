@@ -36,6 +36,11 @@ elif [ "$CONTAINER_CMD" = "docker" ]; then
     HOST_SOCK="/var/run/docker.sock"
   elif [ -S "$HOME/.docker/run/docker.sock" ]; then
     HOST_SOCK="$HOME/.docker/run/docker.sock"
+  else
+    # Colima: check all profiles (~/.colima/<profile>/docker.sock)
+    for sock in "$HOME"/.colima/*/docker.sock; do
+      [ -S "$sock" ] && HOST_SOCK="$sock" && break
+    done
   fi
 fi
 if [ ! -S "$HOST_SOCK" ]; then
