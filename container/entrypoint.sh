@@ -19,4 +19,6 @@ fi
 echo "Running as: $(id)"
 ls -la ~/.claude/.credentials.json 2>/dev/null || echo "No credentials file found"
 
+cd "$HOME/$PROJECT_NAME"
+
 exec claude "$@"

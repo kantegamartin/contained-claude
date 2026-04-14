@@ -196,6 +196,7 @@ $CONTAINER_CMD run --rm -it \
   \
   $PORT_ARGS \
   \
+  -e PROJECT_NAME="$PROJECT_NAME" \
   $GH_TOKEN_ARG \
   "${ANTHROPIC_ARGS[@]}" \
   $PODMAN_ENV \
