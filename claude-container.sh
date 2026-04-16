@@ -13,7 +13,7 @@
 #   ./claude-container.sh --no-token   # run without GitHub token (push/PR outside sandbox)
 #   ./claude-container.sh --install-go-python  # include Go and Python in image
 #   ./claude-container.sh -p "prompt"  # pass arguments through to claude
-#   ./claude-container.sh --exclude node_modules --exclude .git  # hide folders from Claude
+#   ./claude-container.sh --exclude-folder node_modules --exclude-folder .git  # hide folders from Claude
 #
 # To customise the Java version:
 #   JAVA_VERSION=21.0.5-tem ./claude-container.sh --rebuild
@@ -52,7 +52,7 @@ while [[ $# -gt 0 ]]; do
     --no-token) GH_TOKEN_ENABLED=false ;;
     --install-go-python) INSTALL_GO_PYTHON=true ;;
     --folder) PROJECT_FOLDER="$2"; shift ;;
-    --exclude) EXCLUDE_DIRS+=("$2"); shift ;;
+    --exclude-folder) EXCLUDE_DIRS+=("$2"); shift ;;
     *) CLAUDE_ARGS+=("$1") ;;
   esac
   shift
