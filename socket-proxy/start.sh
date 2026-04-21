@@ -70,9 +70,20 @@ cleanup_proxy() {
   fi
 }
 
+# --- Resolve Docker API version ---
+# Use host's DOCKER_API_VERSION if set, otherwise query the socket
+if [ -z "$DOCKER_API_VERSION" ]; then
+  DOCKER_API_VERSION=$(curl -s --unix-socket "$HOST_SOCK" http://localhost/version 2>/dev/null \
+    | python3 -c "import sys,json; print(json.load(sys.stdin).get('ApiVersion',''))" 2>/dev/null)
+fi
+if [ -z "$DOCKER_API_VERSION" ]; then
+  echo -e "${YELLOW}Warning: could not determine Docker API version${NC}"
+fi
+
 # --- Container-mode flags (used by claude-container.sh) ---
 PODMAN_ARGS="-v $FILTERED_SOCK:/tmp/podman.sock"
 PODMAN_ENV="-e DOCKER_HOST=unix:///tmp/podman.sock
             -e TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/tmp/podman.sock
             -e TESTCONTAINERS_RYUK_DISABLED=true
-            -e TESTCONTAINERS_HOST_OVERRIDE=host.containers.internal"
+            -e TESTCONTAINERS_HOST_OVERRIDE=host.containers.internal
+            ${DOCKER_API_VERSION:+-e DOCKER_API_VERSION=$DOCKER_API_VERSION}"
