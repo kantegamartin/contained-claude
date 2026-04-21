@@ -48,6 +48,31 @@ CONTAINER_CMD=docker ./claude-container.sh                # Use Docker instead o
 ./cleanAllContainers.sh   # Full cleanup: containers, images, volumes, networks
 ```
 
+## Troubleshooting
+
+### Container storage and UID mapping
+
+Rootless Podman remaps file ownership in image layers using subordinate UIDs (configured in `/etc/subuid`). Files owned by non-root UIDs inside an image (e.g. UID 33 for www-data) are stored on disk using these subordinate UIDs and will appear owned by unmapped UIDs (e.g. 200000) outside of Podman's user namespace. This makes them impossible to manage with normal file operations.
+
+In practice this rarely matters — always use Podman commands (`podman image rm`, `podman system prune`, `podman system reset`) to manage storage, never raw `rm`. These operate inside Podman's user namespace and handle the shifted UIDs correctly.
+
+If you ever need to touch the storage directly, use `podman unshare`:
+
+```bash
+podman unshare rm -rf ~/.local/share/containers/storage/overlay/<layer-hash>
+```
+
+Setting `ignore_chown_errors = "true"` in `~/.config/containers/storage.conf` is sometimes suggested as a workaround but only works cleanly when combined with `fuse-overlayfs` as the mount program — otherwise Podman will try to create ID-mapped copies of layers at container-run time, which can fail. Don't set it without understanding the full chain.
+
+### After `podman system reset`
+
+`podman system reset` removes `/run/user/$(id -u)/podman/`, and subsequent Podman commands will fail to start with socket errors. Recreate it:
+
+```bash
+mkdir -p /run/user/$(id -u)/podman
+systemctl --user restart podman.socket
+```
+
 ## Contributing
 
 See [CONTRIBUTE.md](CONTRIBUTE.md) for detailed documentation on architecture, mount tables, tool toggles, and platform comparison.
