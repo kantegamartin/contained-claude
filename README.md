@@ -50,7 +50,9 @@ CONTAINER_CMD=docker ./claude-container.sh                # Use Docker instead o
 
 ## Troubleshooting
 
-### Container storage and UID mapping
+The notes below apply only when using rootless Podman as the container runtime. Docker uses a privileged daemon and is not affected.
+
+### Rootless Podman: container storage and UID mapping
 
 Rootless Podman remaps file ownership in image layers using subordinate UIDs (configured in `/etc/subuid`). Files owned by non-root UIDs inside an image (e.g. UID 33 for www-data) are stored on disk using these subordinate UIDs and will appear owned by unmapped UIDs (e.g. 200000) outside of Podman's user namespace. This makes them impossible to manage with normal file operations.
 
@@ -64,7 +66,7 @@ podman unshare rm -rf ~/.local/share/containers/storage/overlay/<layer-hash>
 
 Setting `ignore_chown_errors = "true"` in `~/.config/containers/storage.conf` is sometimes suggested as a workaround but only works cleanly when combined with `fuse-overlayfs` as the mount program — otherwise Podman will try to create ID-mapped copies of layers at container-run time, which can fail. Don't set it without understanding the full chain.
 
-### After `podman system reset`
+### Rootless Podman: after `podman system reset`
 
 `podman system reset` removes `/run/user/$(id -u)/podman/`, and subsequent Podman commands will fail to start with socket errors. Recreate it:
 
