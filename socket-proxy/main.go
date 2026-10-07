@@ -46,9 +46,9 @@ var allowedRoutes = []route{
 	// Images — pull, inspect, list, tag, remove
 	{"POST", p(`/images/create`), false},
 	{"GET", p(`/images/json`), false},
-	{"GET", p(`/images/([^/]+)/json`), false},
-	{"POST", p(`/images/([^/]+)/tag`), false},
-	{"DELETE", p(`/images/([^/]+)`), false},
+	{"GET", p(`/images/(.+)/json`), false},
+	{"POST", p(`/images/(.+)/tag`), false},
+	{"DELETE", p(`/images/(.+)`), false},
 	{"GET", p(`/images/search`), false},
 	{"POST", p(`/images/prune`), false},
 
