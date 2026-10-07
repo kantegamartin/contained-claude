@@ -13,6 +13,7 @@
 #   ./claude-container.sh --no-token   # run without GitHub token (push/PR outside sandbox)
 #   ./claude-container.sh --install-go-python  # include Go and Python in image
 #   ./claude-container.sh --no-update  # skip the Claude Code update check at start
+#   ./claude-container.sh --folder ../other-project  # mount that folder instead of the current one
 #   ./claude-container.sh -p "prompt"  # pass arguments through to claude
 #
 # To customise the Java version:
@@ -44,19 +45,32 @@ INSTALL_GO_PYTHON=false
 UPDATE_CLAUDE=true
 PROJECT_FOLDER="$PWD"
 CLAUDE_ARGS=()
-for arg in "$@"; do
-  case "$arg" in
+while [ $# -gt 0 ]; do
+  case "$1" in
     --rebuild) REBUILD=true ;;
     --debug) DEBUG=true ;;
     --no-podman) PODMAN_MODE="none" ;;
     --no-token) GH_TOKEN_ENABLED=false ;;
     --install-go-python) INSTALL_GO_PYTHON=true ;;
     --no-update) UPDATE_CLAUDE=false ;;
-    --folder) PROJECT_NAME="$1"; shift ;;
-    *) CLAUDE_ARGS+=("$arg") ;;
+    --folder)
+      if [ $# -lt 2 ]; then
+        echo -e "${RED}Error: --folder needs a path${NC}" >&2
+        exit 1
+      fi
+      PROJECT_FOLDER="$2"
+      shift
+      ;;
+    *) CLAUDE_ARGS+=("$1") ;;
   esac
+  shift
 done
-PROJECT_NAME=$(echo "${PROJECT_FOLDER##*/}")
+if [ ! -d "$PROJECT_FOLDER" ]; then
+  echo -e "${RED}Error: folder not found: $PROJECT_FOLDER${NC}" >&2
+  exit 1
+fi
+PROJECT_FOLDER="$(cd "$PROJECT_FOLDER" && pwd)"
+PROJECT_NAME="${PROJECT_FOLDER##*/}"
 
 # --- GitHub CLI authentication ---
 if $GH_TOKEN_ENABLED; then
