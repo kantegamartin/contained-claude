@@ -12,6 +12,7 @@
 #   ./claude-container.sh --no-podman  # disable container-in-container support
 #   ./claude-container.sh --no-token   # run without GitHub token (push/PR outside sandbox)
 #   ./claude-container.sh --install-go-python  # include Go and Python in image
+#   ./claude-container.sh --no-update  # skip the Claude Code update check at start
 #   ./claude-container.sh -p "prompt"  # pass arguments through to claude
 #
 # To customise the Java version:
@@ -40,6 +41,7 @@ DEBUG=false
 PODMAN_MODE="socket"
 GH_TOKEN_ENABLED=true
 INSTALL_GO_PYTHON=false
+UPDATE_CLAUDE=true
 PROJECT_FOLDER="$PWD"
 CLAUDE_ARGS=()
 for arg in "$@"; do
@@ -49,6 +51,7 @@ for arg in "$@"; do
     --no-podman) PODMAN_MODE="none" ;;
     --no-token) GH_TOKEN_ENABLED=false ;;
     --install-go-python) INSTALL_GO_PYTHON=true ;;
+    --no-update) UPDATE_CLAUDE=false ;;
     --folder) PROJECT_NAME="$1"; shift ;;
     *) CLAUDE_ARGS+=("$arg") ;;
   esac
@@ -155,6 +158,15 @@ if $GH_TOKEN_ENABLED; then
   GH_TOKEN_ARG="-e GH_TOKEN=$(gh auth token)"
 fi
 
+UPDATE_ARG=""
+if ! $UPDATE_CLAUDE; then
+  UPDATE_ARG="-e CLAUDE_SKIP_UPDATE=1"
+fi
+
+# Claude Code's native install lives in ~/.local. Without a volume, every update is lost with the
+# --rm container. On first use the volume is seeded from the image.
+CLAUDE_INSTALL_VOLUME="$IMAGE_NAME-local"
+
 $CONTAINER_CMD run --rm -it \
   --name "$CONTAINER_NAME" \
   --hostname claude-sandbox \
@@ -167,6 +179,7 @@ $CONTAINER_CMD run --rm -it \
   -v "$HOME/.claude:$CHOME/.claude" \
   -v "$HOME/.claude.json:$CHOME/.claude.json" \
   -v "$HOME/.claude.json.backup:$CHOME/.claude.json.backup" \
+  -v "$CLAUDE_INSTALL_VOLUME:$CHOME/.local" \
   \
   -e CHROME_BIN=/usr/bin/google-chrome \
   \
@@ -180,6 +193,7 @@ $CONTAINER_CMD run --rm -it \
   $PORT_ARGS \
   \
   $GH_TOKEN_ARG \
+  $UPDATE_ARG \
   $PODMAN_ENV \
   \
   $ENTRYPOINT \

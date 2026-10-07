@@ -153,8 +153,11 @@ See the [Socket proxy](#socket-proxy) section below for details on how the proxy
 # First run (builds the image, ~1-2 GB)
 ./claude-container.sh
 
-# Force rebuild (e.g. to update Claude Code or change Java version)
+# Force rebuild (e.g. to change Java version)
 ./claude-container.sh --rebuild
+
+# Start without the Claude Code update check (e.g. offline)
+./claude-container.sh --no-update
 
 # Custom Java version
 JAVA_VERSION=21.0.5-tem ./claude-container.sh --rebuild
@@ -321,7 +324,7 @@ echo -e "${RED}error${NC}"
 | File-system isolation | allowlist (bind mounts) | denylist (Seatbelt rules) | allowlist (volume mounts) |
 | Tools from | host | host | image |
 | Java version | host's SDKMAN | host's SDKMAN | built into image |
-| Update Claude | automatic (host binary) | automatic (host binary) | rebuild image |
+| Update Claude | automatic (host binary) | automatic (host binary) | at every start (kept in the `claude-sandbox-local` volume) |
 | Startup time | instant | instant | instant (after first build) |
 | Image size | N/A | N/A | ~1-2 GB |
 
