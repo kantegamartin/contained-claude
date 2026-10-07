@@ -120,7 +120,7 @@ if $DEBUG; then
 fi
 
 # --- Check available ports ---
-CONTAINER_PORTS="3000 4200 5005 8080"
+CONTAINER_PORTS="3000 5005 8080"
 PORT_ARGS=""
 is_port_in_use() {
   if command -v ss &>/dev/null; then
@@ -162,10 +162,13 @@ $CONTAINER_CMD run --rm -it \
   $PODMAN_ARGS \
   \
   -v "$PROJECT_FOLDER:$CHOME/$PROJECT_NAME" \
+  -w "$CHOME/$PROJECT_NAME" \
   \
   -v "$HOME/.claude:$CHOME/.claude" \
   -v "$HOME/.claude.json:$CHOME/.claude.json" \
   -v "$HOME/.claude.json.backup:$CHOME/.claude.json.backup" \
+  \
+  -e CHROME_BIN=/usr/bin/google-chrome \
   \
   -v "$HOME/.m2:$CHOME/.m2" \
   \
