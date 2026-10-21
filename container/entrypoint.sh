@@ -22,7 +22,7 @@ if [ -z "$CLAUDE_SKIP_UPDATE" ]; then
     || echo "Claude Code update failed or timed out, starting the installed version"
 fi
 
-echo "Running as: $(id)"
-ls -la ~/.claude/.credentials.json 2>/dev/null || echo "No credentials file found"
+# echo "Running as: $(id)"
+# ls -la ~/.claude/.credentials.json 2>/dev/null || echo "No credentials file found"
 
 exec claude "$@"
